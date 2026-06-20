@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, field_validator
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import date
-import mysql.connector
+from database import get_connection
 
 
 
@@ -15,15 +15,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def get_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="MASHALLAH",
-        database="placement_tracker"
-    )
 
 
 class Problem(BaseModel):

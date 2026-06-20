@@ -3,6 +3,8 @@ import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
 import "./App.css";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 function App() {
 
   const [problems, setProblems] = useState([]);
@@ -16,7 +18,7 @@ function App() {
 
   useEffect(() => {
 
-    fetch("http://127.0.0.1:8000/problems")
+    fetch(`${API_BASE_URL}/problems`)
       .then((response) => response.json())
       .then((data) => {
         setProblems(data);
@@ -27,7 +29,7 @@ function App() {
   async function addProblem() {
 
     const response = await fetch(
-      "http://127.0.0.1:8000/problems",
+      `${API_BASE_URL}/problems`,
       {
         method: "POST",
         headers: {
@@ -44,7 +46,7 @@ function App() {
     console.log(response);
 
     const newResponse = await fetch(
-      "http://127.0.0.1:8000/problems"
+      `${API_BASE_URL}/problems`
     );
 
     const data = await newResponse.json();
@@ -59,7 +61,7 @@ function App() {
   async function deleteProblem(id) {
 
     const response = await fetch(
-      `http://127.0.0.1:8000/problems/${id}`,
+      `${API_BASE_URL}/problems/${id}`,
       {
         method: "DELETE"
       }
@@ -79,7 +81,7 @@ function App() {
  async function updateProblem(id) {
 
   const response = await fetch(
-    `http://127.0.0.1:8000/problems/${id}`,
+    `${API_BASE_URL}/problems/${id}`,
     {
       method: "PUT",
 
@@ -132,7 +134,7 @@ const filteredProblems = problems.filter(
 async function makeEasy(id) {
 
   const response = await fetch(
-    `http://127.0.0.1:8000/problems/${id}`,
+    `${API_BASE_URL}/problems/${id}`,
     {
       method: "PUT",
 
