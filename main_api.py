@@ -17,6 +17,11 @@ app.add_middleware(
 )
 
 
+@app.get("/")
+def read_root():
+    return {"status": "success", "message": "Placement Tracker API is running successfully!"}
+
+
 class Problem(BaseModel):
 
     name: str
