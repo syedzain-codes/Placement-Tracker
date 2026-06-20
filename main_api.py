@@ -5,6 +5,13 @@ from datetime import date
 from database import get_connection
 
 app = FastAPI()
+@app.get("/env")
+def env():
+    return {
+        "MYSQLHOST": os.getenv("MYSQLHOST"),
+        "MYSQLPORT": os.getenv("MYSQLPORT"),
+        "MYSQLDATABASE": os.getenv("MYSQLDATABASE"),
+    }
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
