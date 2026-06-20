@@ -1,11 +1,7 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, field_validator
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import date
 from database import get_connection
-
-
-
+from schemas import Problem, UpdateProblem
 
 app = FastAPI()
 
@@ -18,67 +14,30 @@ app.add_middleware(
 
 
 @app.get("/")
-def read_root():
-    return {"status": "success", "message": "Placement Tracker API is running successfully!"}
+def home():
+    return {
+        "status": "success",
+        "message": "Placement Tracker API Running",
+        "docs": "/docs"
+    }
 
 
-class Problem(BaseModel):
+@app.get("/health")
+def health_check():
+    try:
+        conn = get_connection()
+        conn.close()
 
-    name: str
-    topic: str
-    difficulty: str
+        return {
+            "status": "healthy",
+            "database": "connected"
+        }
 
-    @field_validator("difficulty")
-    @classmethod
-    def validate_difficulty(cls, value):
-
-        value = value.strip().capitalize()
-
-        allowed = [
-            "Easy",
-            "Medium",
-            "Hard"
-        ]
-
-        if value not in allowed:
-            raise ValueError(
-                "Difficulty must be Easy, Medium or Hard"
-            )
-
-        return value
-
-
-class UpdateProblem(BaseModel):
-
-    topic: str
-    difficulty: str
-
-    @field_validator("difficulty")
-    @classmethod
-    def validate_difficulty(cls, value):
-
-        value = value.strip().capitalize()
-
-        allowed = [
-            "Easy",
-            "Medium",
-            "Hard"
-        ]
-
-        if value not in allowed:
-            raise ValueError(
-                "Difficulty must be Easy, Medium or Hard"
-            )
-
-        return value
-
-
-class ProblemResponse(BaseModel):
-    id: int
-    name: str
-    topic: str
-    difficulty: str
-    solved_date: date
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "database": str(e)
+        }
 
 
 
