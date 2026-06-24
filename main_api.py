@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, field_validator
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import date
 from database import get_connection
+from schemas import Problem, UpdateProblem
 
 app = FastAPI()
 @app.get("/env")
@@ -77,6 +76,13 @@ class ProblemResponse(BaseModel):
     topic: str
     difficulty: str
     solved_date: date
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
